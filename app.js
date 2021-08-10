@@ -4,7 +4,8 @@ import logger from "morgan";
 import mongoose from "mongoose";
 
 import indexRouter from "./routes/index.js";
-import universityRouter from "./routes/universities.js";
+import schoolRouter from "./routes/schools.js";
+import fieldRouter from "./routes/fields.js";
 import secrets from "./secrets.js";
 
 var app = express();
@@ -29,6 +30,7 @@ app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use("/", indexRouter);
-app.use("/universities", universityRouter);
+app.use("/fields", fieldRouter);
+app.use("/schools", schoolRouter);
 
 export default app;
