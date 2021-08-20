@@ -33,19 +33,35 @@ export const postStudents = (req, res) => {
   });
 };
 
-export const updateStudent = async (req, res) => {
-  const programId = req.body.programId;
-
+export const patchStudent = async (req, res) => {
   const filter = { _id: req.params.id };
-  const update = {
-    $addToSet: { registeredPrograms: [{ programId: programId }] },
-  };
-  try {
-    const student = await Student.findOneAndUpdate(filter, update, {
-      new: true,
-    });
-    res.status(200).send(student);
-  } catch (error) {
-    res.status(500).send(error);
+  const update = req.body;
+
+  Student.findOneAndUpdate(filter, update, { new: true }, (err, student) => {
+    if (err) {
+      res.status(500).send({ msg: err });
+    } else {
+      res.status(200).send(student);
+    }
+  });
+};
+
+export const registerProgram = async (req, res) => {
+  const programId = req.params.programId;
+  const studentId = req.params.id;
+
+  const student = await Student.findOne({ _id: studentId }).exec();
+
+  const exists = student.registeredPrograms.some(
+    (p) => p.programId.toString() === programId
+  );
+
+  if (!exists) {
+    const s = Student(student);
+    s.registeredPrograms.push({ programId: programId });
+    s.save();
+    res.status(200).send(s);
+  } else {
+    res.status(400).send({ msg: "Already applied to this program." });
   }
 };
