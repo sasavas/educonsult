@@ -1,7 +1,15 @@
 import Field from "../models/field.js";
 
 export const getFields = (req, res) => {
-  res.json({ fields: ["cambridge", "sapienza"] });
+  Field.find({})
+    .populate("school")
+    .exec((err, data) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.status(200).json(data);
+      }
+    });
 };
 
 export const postFields = (req, res) => {
