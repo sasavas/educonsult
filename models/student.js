@@ -23,7 +23,12 @@ const StudentSchema = new Schema({
   registeredPrograms: [
     mongoose.Schema(
       {
-        program: { type: Schema.Types.ObjectId, ref: "Field", required: true },
+        programId: {
+          type: Schema.Types.ObjectId,
+          ref: "Field",
+          required: true,
+          unique: true,
+        },
         registeredAt: { type: Date, default: Date.now },
       },
       { _id: false }

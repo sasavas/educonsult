@@ -34,10 +34,12 @@ export const postStudents = (req, res) => {
 };
 
 export const updateStudent = async (req, res) => {
-  const programId = req.body.program;
+  const programId = req.body.programId;
 
   const filter = { _id: req.params.id };
-  const update = { registeredPrograms: [{ program: programId }] };
+  const update = {
+    $addToSet: { registeredPrograms: [{ programId: programId }] },
+  };
   try {
     const student = await Student.findOneAndUpdate(filter, update, {
       new: true,
