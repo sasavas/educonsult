@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { PipelineSchema } from "./pipeline.js";
 
 const Schema = mongoose.Schema;
 
@@ -31,8 +32,7 @@ const StudentSchema = new Schema({
       registeredAt: { type: Date, default: Date.now },
       _id: false,
       pipeline: {
-        type: mongoose.Schema.ObjectId,
-        ref: "Pipeline",
+        type: PipelineSchema,
         required: true,
       },
     }),

@@ -22,6 +22,8 @@ const PipelineSchema = new Schema({
   ],
 });
 
+export { PipelineSchema };
+
 const Pipeline = mongoose.model("Pipeline", PipelineSchema);
 
 export default Pipeline;

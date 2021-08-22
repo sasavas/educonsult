@@ -49,6 +49,9 @@ export const patchStudent = async (req, res) => {
 export const registerProgram = async (req, res) => {
   const programId = req.params.programId;
   const studentId = req.params.id;
+  const pipeline = req.body;
+
+  console.log("studentId", studentId);
 
   const student = await Student.findOne({ _id: studentId }).exec();
 
@@ -58,9 +61,15 @@ export const registerProgram = async (req, res) => {
 
   if (!exists) {
     const s = Student(student);
-    s.registeredPrograms.push({ programId: programId });
-    s.save();
-    res.status(200).send(s);
+    s.registeredPrograms.push({ programId: programId, pipeline: pipeline });
+    s.save((err, saved) => {
+      if (err) {
+        res.status(500).send("could not register to this program.");
+      } else {
+        console.log(saved);
+        res.status(200).send(saved);
+      }
+    });
   } else {
     res.status(400).send({ msg: "Already applied to this program." });
   }
