@@ -1,13 +1,24 @@
 import Student from "../models/student.js";
 
-export const getStudents = (req, res) => {
-  Student.find({}, (err, students) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(students);
-    }
-  });
+export const getStudents = async (req, res) => {
+  try {
+    const students = await Student.find({})
+      .populate({
+        path: "registeredPrograms",
+        populate: {
+          path: "programId",
+          model: "Field",
+          populate: {
+            path: "school",
+            model: "School",
+          },
+        },
+      })
+      .exec();
+    res.status(200).send(students);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 };
 
 export const getStudentById = (req, res) => {
@@ -49,7 +60,8 @@ export const patchStudent = async (req, res) => {
 export const registerProgram = async (req, res) => {
   const programId = req.params.programId;
   const studentId = req.params.id;
-  const pipeline = req.body;
+  const pipeline = req.body.pipeline;
+  const applicationDate = req.body.applicationDate;
 
   console.log("studentId", studentId);
 
@@ -61,7 +73,11 @@ export const registerProgram = async (req, res) => {
 
   if (!exists) {
     const s = Student(student);
-    s.registeredPrograms.push({ programId: programId, pipeline: pipeline });
+    s.registeredPrograms.push({
+      programId: programId,
+      pipeline: pipeline,
+      registeredAt: applicationDate,
+    });
     s.save((err, saved) => {
       if (err) {
         res.status(500).send("could not register to this program.");
