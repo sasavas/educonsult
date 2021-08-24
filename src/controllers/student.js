@@ -6,8 +6,8 @@ export const getStudents = async (req, res) => {
       .populate({
         path: "registeredPrograms",
         populate: {
-          path: "programId",
-          model: "Field",
+          path: "program",
+          model: "Program",
           populate: {
             path: "school",
             model: "School",
@@ -23,13 +23,12 @@ export const getStudents = async (req, res) => {
 
 export const getStudentById = async (req, res) => {
   try {
-    console.log(typeof req.params.id);
-    const student = await Student.find({ _id: req.params.id })
+    const student = await Student.findOne({ _id: req.params.id })
       .populate({
         path: "registeredPrograms",
         populate: {
-          path: "programId",
-          model: "Field",
+          path: "program",
+          model: "Program",
           populate: {
             path: "school",
             model: "School",
@@ -37,10 +36,9 @@ export const getStudentById = async (req, res) => {
         },
       })
       .exec();
-    console.log(student);
     res.status(200).send(student);
   } catch (error) {
-    res.status(500).send(err);
+    res.status(500).send(error);
   }
 };
 
@@ -76,30 +74,52 @@ export const registerProgram = async (req, res) => {
   const pipeline = req.body.pipeline;
   const applicationDate = req.body.applicationDate;
 
-  console.log("studentId", studentId);
+  // console.log({
+  //   programId,
+  //   studentId,
+  //   pipeline,
+  //   applicationDate,
+  // });
 
   const student = await Student.findOne({ _id: studentId }).exec();
 
   const exists = student.registeredPrograms.some(
-    (p) => p.programId.toString() === programId
+    (p) => p.program.toString() === programId
   );
 
   if (!exists) {
     const s = Student(student);
     s.registeredPrograms.push({
-      programId: programId,
+      program: programId,
       pipeline: pipeline,
       registeredAt: applicationDate,
     });
     s.save((err, saved) => {
       if (err) {
+        console.log(err);
         res.status(500).send("could not register to this program.");
       } else {
-        console.log(saved);
-        res.status(200).send(saved);
+        saved
+          .populate({
+            path: "registeredPrograms",
+            populate: {
+              path: "program",
+              model: "Program",
+              populate: {
+                path: "school",
+                model: "School",
+              },
+            },
+          })
+          .execPopulate()
+          .then((populated) => {
+            console.log("saved student:", populated);
+            res.status(200).send(populated);
+          });
       }
     });
   } else {
+    console.log("already applied");
     res.status(400).send({ msg: "Already applied to this program." });
   }
 };
