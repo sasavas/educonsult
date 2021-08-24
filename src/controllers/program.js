@@ -12,6 +12,18 @@ export const getPrograms = (req, res) => {
     });
 };
 
+export const getProgramById = (req, res) => {
+  Program.findOne({ _id: req.params.id })
+    .populate("school")
+    .exec((err, data) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.status(200).send(data);
+      }
+    });
+};
+
 export const postPrograms = (req, res) => {
   console.log(req.body);
   const program = new Program(req.body);
