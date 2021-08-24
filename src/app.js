@@ -6,7 +6,7 @@ import cors from "cors";
 
 import indexRouter from "./routes/index.js";
 import schoolRouter from "./routes/schools.js";
-import fieldRouter from "./routes/fields.js";
+import programRouter from "./routes/programs.js";
 import studentRouter from "./routes/students.js";
 import pipelineRouter from "./routes/pipeline.js";
 import secrets from "./secrets.js";
@@ -43,7 +43,7 @@ app.use(cookieParser());
 // });
 
 app.use("/", indexRouter);
-app.use("/fields", fieldRouter);
+app.use("/programs", programRouter);
 app.use("/schools", schoolRouter);
 app.use("/students", studentRouter);
 app.use("/pipelines", pipelineRouter);

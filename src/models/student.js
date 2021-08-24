@@ -23,9 +23,9 @@ const StudentSchema = new Schema({
   },
   registeredPrograms: [
     mongoose.Schema({
-      programId: {
+      program: {
         type: Schema.Types.ObjectId,
-        ref: "Field",
+        ref: "Program",
         required: true,
         unique: true,
       },

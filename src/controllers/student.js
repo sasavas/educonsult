@@ -21,14 +21,27 @@ export const getStudents = async (req, res) => {
   }
 };
 
-export const getStudentById = (req, res) => {
-  Student.find({ _id: req.params.id }, (err, student) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(student);
-    }
-  });
+export const getStudentById = async (req, res) => {
+  try {
+    console.log(typeof req.params.id);
+    const student = await Student.find({ _id: req.params.id })
+      .populate({
+        path: "registeredPrograms",
+        populate: {
+          path: "programId",
+          model: "Field",
+          populate: {
+            path: "school",
+            model: "School",
+          },
+        },
+      })
+      .exec();
+    console.log(student);
+    res.status(200).send(student);
+  } catch (error) {
+    res.status(500).send(err);
+  }
 };
 
 export const postStudents = (req, res) => {

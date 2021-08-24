@@ -1,7 +1,7 @@
-import Field from "../models/field.js";
+import Program from "../models/program.js";
 
-export const getFields = (req, res) => {
-  Field.find({})
+export const getPrograms = (req, res) => {
+  Program.find({})
     .populate("school")
     .exec((err, data) => {
       if (err) {
@@ -12,10 +12,10 @@ export const getFields = (req, res) => {
     });
 };
 
-export const postFields = (req, res) => {
+export const postPrograms = (req, res) => {
   console.log(req.body);
-  const field = new Field(req.body);
-  field.save((err) => {
+  const program = new Program(req.body);
+  program.save((err) => {
     if (err) {
       console.log(err);
       res.status(500).send("could not be saved");

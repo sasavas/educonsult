@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const FieldSchema = new Schema({
+const ProgramSchema = new Schema({
   school: { type: Schema.Types.ObjectId, ref: "School", required: true },
-  fieldType: {
+  programType: {
     type: String,
     enum: {
       values: ["bachelor", "master"],
@@ -12,7 +12,7 @@ const FieldSchema = new Schema({
     },
     required: true,
   },
-  fieldName: { type: String, required: true },
+  programName: { type: String, required: true },
   vacancies: { type: Number },
   fee: { type: Number },
   languge: { type: String },
@@ -40,6 +40,6 @@ const FieldSchema = new Schema({
   notes: { type: String },
 });
 
-const Field = mongoose.model("Field", FieldSchema);
+const Program = mongoose.model("Program", ProgramSchema);
 
-export default Field;
+export default Program;
