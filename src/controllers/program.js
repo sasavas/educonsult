@@ -1,7 +1,9 @@
 import Program from "../models/program.js";
 
 export const getPrograms = (req, res) => {
-  Program.find({})
+  console.log(req.query);
+
+  Program.find(req.query)
     .populate("school")
     .exec((err, data) => {
       if (err) {
