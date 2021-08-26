@@ -9,6 +9,7 @@ import schoolRouter from "./routes/schools.js";
 import programRouter from "./routes/programs.js";
 import studentRouter from "./routes/students.js";
 import pipelineRouter from "./routes/pipeline.js";
+import dashboardRouter from "./routes/dashboard.js";
 import secrets from "./secrets.js";
 
 var app = express();
@@ -47,5 +48,6 @@ app.use("/programs", programRouter);
 app.use("/schools", schoolRouter);
 app.use("/students", studentRouter);
 app.use("/pipelines", pipelineRouter);
+app.use("/dashboard", dashboardRouter);
 
 export default app;
