@@ -10,11 +10,11 @@ import programRouter from "./routes/programs.js";
 import studentRouter from "./routes/students.js";
 import pipelineRouter from "./routes/pipeline.js";
 import dashboardRouter from "./routes/dashboard.js";
-import secrets from "./secrets.js";
 
 var app = express();
 
-const uri = `mongodb+srv://appicient:${secrets.Mongodb.password}@main.fzy7k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWD}@main.fzy7k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
