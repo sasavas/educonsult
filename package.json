@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node --exec node_modules/.bin/babel-node ./bin/www",
+    "start": "node ./bin/www",
     "dev": "nodemon --exec node_modules/.bin/babel-node ./bin/www"
   },
   "dependencies": {
